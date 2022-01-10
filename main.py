@@ -26,7 +26,7 @@ def run(fraud_file, file_list, vendors, credit_cards):
     valid_transactions, fraud_transactions = filter_fraud_in_transactions(fraud_dataset, valid_results)
     fraud_by_state = get_fraud_by_state(fraud_transactions)
     fraud_transactions, fraud_by_vendor = get_fraud_by_vendor(fraud_transactions)
-    final_df = mask_credit_cards(valid_results.head())
+    final_df = mask_credit_cards(valid_results)
     make_json_file(final_df)
 
 
