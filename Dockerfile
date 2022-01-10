@@ -12,7 +12,7 @@ COPY requirements.txt requirements.txt
 COPY functions.py functions.py 
 COPY requirements.txt requirements.txt
 COPY datasets /code_challenge/datasets
-ADD . /code_challenge 
+# ADD . /code_challenge 
 RUN pip install --upgrade pip
 
 # Install dependencies

@@ -201,5 +201,5 @@ def mask_credit_cards(valid_results):
 def make_json_file(final_df):
     directory = 'results/'
     sample = final_df.to_dict()
-    with open(directory + "final_df1.json", "w") as outfile:
+    with open(directory + "final_df_head.json", "w") as outfile:
         json.dump(sample, outfile)
