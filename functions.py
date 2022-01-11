@@ -136,8 +136,20 @@ def filter_transactions(transaction_files, credit_cards, start_vals):
 def filter_fraud_in_transactions(fraud_dataset, valid_results):
     """
     From the santitized results dataframe 
-    filter the DF to display only the numbers
-    that are present in the fraud.zip file 
+    filter the valid_results into either fraud_transactions
+	that are defined as transactions which are present 
+	in the original fraud file and those that are not 
+	as valid_transactions
+
+    :param fraud_dataset: pandas dataframe of fraud transactions
+	:param valid_results: a sanitized dataframe of transactions
+	that contain a valid prefix  vendor number
+    :rtype: pandas dataframe
+	:rtype: pandas dataframe 
+    :return: a dataframe of transactions that contain a valid vendor
+	prefix number and are not present in the fraud dataset 
+	:return: a dataframe of transactions that contain a valid vendor
+	prefix number while also being present in the fraud dataset 
     """
     fraud_transactions = valid_results[valid_results['credit_card_number'].isin(fraud_dataset)].drop_duplicates()
     fraud_transactions = fraud_transactions.reset_index(drop=True)
@@ -162,6 +174,12 @@ def get_fraud_by_state(fraud_transactions):
 
 # - Create a report of the number of fraudulent transactions per card vendor, e.g., maestro => 45, amex => 78, etc...
 def get_vendors_val_key(item):
+    """
+	Function to  help work with the 
+	vendors dictionary in order to create a 
+	report of the fraudulent transactions 
+	per card vendor
+	"""
     for key, val in vendors.items():
         if item in val:
             return key
@@ -182,6 +200,11 @@ def get_fraud_by_vendor(fraud_transactions):
 
 
 def mask_credit_cards(valid_results):
+    """
+	Masks the last 9 digits of each transaction credit 
+	card number to '*' and creates a new dataframe 
+	reflecting the masked credit card values
+	"""
     dicts = []
     for index, row in enumerate(valid_results['credit_card_number']):
         full_card_number = valid_results['credit_card_number'].astype(str).iloc[index][:-9]
@@ -198,8 +221,22 @@ def mask_credit_cards(valid_results):
     return df_dicts
 
 
-def make_json_file(final_df):
-    directory = 'results/'
-    sample = final_df.to_dict()
-    with open(directory + "final_df_head.json", "w") as outfile:
-        json.dump(sample, outfile)
+def make_json_file(df):
+    """
+	Takes in a dataframe and converts to dictionary
+	then makes a json file format of the dataframe
+	"""
+    new_dict = df.to_dict()
+    with open('full_final_df.json', 'w') as outfile:
+        json_output = json.dump(new_dict, outfile)
+
+def make_binary_file(df):
+    """
+	Takes in a dataframe and converts to dictionary
+	then makes a byte version of a json file format
+	"""
+    new_dict = df.to_dict()
+    with open('binary_final_df.json', 'w', encoding='utf-8') as outfile:
+            json_output = json.dump(new_dict,outfile)
+
+        

@@ -1,18 +1,16 @@
 # Use the Python Docker Image to speed up the process
-FROM python:3
+FROM python
+
+RUN apt-get update
 
 # Set the working directory 
 WORKDIR /code_challenge
 
-RUN apt-get update
-
 # Copy required files and information into their appropriate locations
-COPY utils.py utils.py 
-COPY requirements.txt requirements.txt 
-COPY functions.py functions.py 
-COPY requirements.txt requirements.txt
-COPY datasets /code_challenge/datasets
-# ADD . /code_challenge 
+COPY datasets/ /code_challenge/datasets
+COPY requirements.txt /code_challenge/
+ADD . /code_challenge 
+
 RUN pip install --upgrade pip
 
 # Install dependencies
